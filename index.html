@@ -1,0 +1,710 @@
+<!DOCTYPE html>
+ <!--=============================================
+  * @Project: Avaliação de Aplicativos de Ensino de Algoritmos  
+  * @Author: Genilson Messias de Souza
+  * @Email:genilson.souza@estudante.ifms.edu.br
+  * @Orientador: Dr. Marcio T. Silva
+  * @Institution: IFMS (Instituto Federal de Mato Grosso do Sul)
+  * @Date: 2024-06-15
+  * @Created: 2024-06-15
+  * @Version: 1.0
+  * @Description: Análise de usabilidade de apps educacionais
+  ============================================= -->
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projeto TCC - Genilson Mess: Avaliação de Usabilidade e Interatividade</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Roboto', sans-serif;
+            background: linear-gradient(135deg, #1a2a4a, #2c3e50);
+            color: #ffffff;
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .container {
+            max-width: 1000px;
+            width: 100%;
+            margin: 0 auto;
+        }
+        
+        header {
+            text-align: center;
+            margin: 30px 0;
+            padding: 20px;
+            border-radius: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            color: #4fc3f7;
+            margin-bottom: 10px;
+            text-shadow: 0 0 10px rgba(79, 195, 247, 0.5);
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            color: #bbdefb;
+            margin-bottom: 15px;
+        }
+        
+        .autor-info {
+            background: rgba(79, 195, 247, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+            margin-top: 20px;
+            text-align: center;
+        }
+        
+        .autor-info p {
+            margin: 5px 0;
+            color: #e0f7fa;
+        }
+        
+        .source {
+            font-style: italic;
+            color: #90a4ae;
+            font-size: 0.9rem;
+        }
+        
+        .chart-container {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 10px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+        }
+        
+        .chart-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+        
+        .chart-icon {
+            width: 50px;
+            height: 50px;
+            background: rgba(79, 195, 247, 0.2);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 15px;
+        }
+        
+        .chart-icon svg {
+            width: 30px;
+            height: 30px;
+            fill: #4fc3f7;
+        }
+        
+        .chart-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #4fc3f7;
+        }
+        
+        canvas {
+            width: 100% !important;
+            height: 500px !important;
+        }
+        
+        .legend-container {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 25px;
+            padding: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+        }
+        
+        .legend-item {
+            display: flex;
+            align-items: center;
+            font-size: 0.9rem;
+        }
+        
+        .legend-color {
+            width: 20px;
+            height: 20px;
+            border-radius: 4px;
+            margin-right: 8px;
+        }
+        
+        .summary {
+            margin-top: 30px;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+            border-left: 4px solid #4fc3f7;
+        }
+        
+        .summary h2 {
+            color: #4fc3f7;
+            margin-bottom: 15px;
+        }
+        
+        .summary-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+        }
+        
+        .summary-point {
+            background: rgba(79, 195, 247, 0.1);
+            padding: 15px;
+            border-radius: 8px;
+        }
+        
+        /* Botão de Insights */
+		
+        .insights-button {
+			 
+			color: #FFEB3B; /* Amarelo vibrante */
+			font-weight: 600; /* Adiciona peso para melhor legibilidade */
+			text-shadow: 0 0 5px rgba(255, 235, 59, 0.5); /* Sombra suave para contraste */
+		   
+            display: block;
+            width: 200px;
+            margin: 30px auto;
+            padding: 12px 20px;
+            background: linear-gradient(135deg, #4fc3f7, #2196f3);
+             
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 500;
+			color: #FFEB3B;
+            text-shadow: 0 2px 3px rgba(0, 0, 0, 0.7);
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(33, 150, 243, 0.4);
+            transition: all 0.3s ease;
+        }
+        
+        .insights-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(33, 150, 243, 0.6);
+        }
+        
+        /* Modal de Insights */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            overflow-y: auto;
+            backdrop-filter: blur(5px);
+        }
+        
+        .modal-content {
+            background: linear-gradient(135deg, #1a2a4a, #2c3e50);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 80%;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(79, 195, 247, 0.3);
+            position: relative;
+        }
+        
+        .close-button {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            color: #90a4ae;
+            font-size: 1.5rem;
+            cursor: pointer;
+            transition: color 0.3s;
+        }
+        
+        .close-button:hover {
+            color: #4fc3f7;
+        }
+        
+        .insight-section {
+            margin-top: 30px;
+        }
+        
+        .insight-section h3 {
+            color: #4fc3f7;
+            margin-bottom: 20px;
+            font-size: 1.8rem;
+            text-align: center;
+        }
+        
+        .insight-category {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border-left: 4px solid #4fc3f7;
+        }
+        
+        .insight-category h4 {
+            color: #bbdefb;
+            margin-bottom: 10px;
+            font-size: 1.3rem;
+        }
+        
+        .insight-category p {
+            margin-bottom: 15px;
+            line-height: 1.6;
+        }
+        
+        .recommendations {
+            margin-top: 15px;
+            padding: 15px;
+            background: rgba(79, 195, 247, 0.1);
+            border-radius: 6px;
+        }
+        
+        .recommendations h5 {
+            color: #bbdefb;
+            margin-bottom: 10px;
+            font-size: 1.1rem;
+        }
+        
+        .recommendations ul {
+            padding-left: 20px;
+        }
+        
+        .recommendations li {
+            margin-bottom: 8px;
+        }
+        
+        footer {
+            margin-top: 30px;
+            text-align: center;
+            color: #90a4ae;
+            font-size: 0.9rem;
+            padding: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            h1 {
+                font-size: 2rem;
+            }
+            .chart-title {
+                font-size: 1.4rem;
+            }
+            canvas {
+                height: 400px !important;
+            }
+            .modal-content {
+                width: 90%;
+                padding: 20px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .chart-header {
+                flex-direction: column;
+                text-align: center;
+            }
+            .chart-icon {
+                margin-right: 0;
+                margin-bottom: 15px;
+            }
+            canvas {
+                height: 350px !important;
+            }
+            .insight-category {
+                padding: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>AVALIAÇÃO DA EFICÁCIA DE APLICATIVOS MÓVEIS NO ENSINO DE ALGORITMOS</h1>
+            <h2 class="subtitle">Uma abordagem voltada para iniciantes em programação</h2>
+            
+            <div class="autor-info">
+                <p><strong>Autor:</strong> Prof. Genilson Messias de Souza</p>
+                <p><strong>Orientador:</strong>  Dr. Márcio Teixeira Oliveira </p>
+                <p><strong>Instituição:</strong> IFMS (Instituto Federal de Mato Grosso do Sul)</p>
+            </div>
+            
+            <p class="source">Fonte: Elaborado pelo autor (2024)</p>
+        </header>
+        
+        <!-- Gráfico 1 - Avaliação  de Usabilidade e Interatividade -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <div class="chart-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M7 8l-4 4 4 4M17 8l4 4-4 4M14 4l-4 16"/>
+                    </svg>
+                </div>
+                <h2 class="chart-title">Tabela 1 - Avaliação de Usabilidade e Interatividade</h2>
+            </div>
+            
+            <canvas id="usabilityChart"></canvas>
+            
+            <div class="legend-container">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #4fc3f7;"></div>
+                    <span>Excelente</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #66bb6a;"></div>
+                    <span>Bom</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ffee58;"></div>
+                    <span>Regular</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ef5350;"></div>
+                    <span>Ruim</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #b0bec5;"></div>
+                    <span>Não aplica</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Gráfico 2 - Avaliação da Qualidade Pedagógica e do Conteúdo -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <div class="chart-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                    </svg>
+                </div>
+                <h2 class="chart-title">Tabela 2 - Avaliação da Qualidade Pedagógica e do Conteúdo</h2>
+            </div>
+            
+            <canvas id="pedagogicalQualityChart"></canvas>
+            
+            <div class="legend-container">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #4fc3f7;"></div>
+                    <span>Excelente</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #66bb6a;"></div>
+                    <span>Bom</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ffee58;"></div>
+                    <span>Regular</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ef5350;"></div>
+                    <span>Ruim</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #b0bec5;"></div>
+                    <span>Não aplica</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Gráfico 3 - Avaliação  do Suporte e Efetividade -->
+        <div class="chart-container">
+            <div class="chart-header">
+                <div class="chart-icon">
+                    <svg viewBox="0 0 24 24">
+                        <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9M13.73 21a2 2 0 01-3.46 0"/>
+                    </svg>
+                </div>
+                <h2 class="chart-title">Tabela 3 - Avaliação do Suporte e Efetividade</h2>
+            </div>
+            
+            <canvas id="supportEffectivenessChart"></canvas>
+            
+            <div class="legend-container">
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #4fc3f7;"></div>
+                    <span>Excelente</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #66bb6a;"></div>
+                    <span>Bom</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ffee58;"></div>
+                    <span>Regular</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #ef5350;"></div>
+                    <span>Ruim</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background-color: #b0bec5;"></div>
+                    <span>Não aplica</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Botão para abrir o modal de insights -->
+        <button class="insights-button" id="insightsButton">Ver Insights Completos</button>
+        
+        <!-- Modal de Insights -->
+        <div class="modal" id="insightsModal">
+            <div class="modal-content">
+                <span class="close-button" id="closeModal">&times;</span>
+                
+                <div class="insight-section">
+                    <h3>Conclusões e Insights Estratégicos</h3>
+                    
+                    <div class="insight-category">
+                        <h4>Usabilidade e Interatividade</h4>
+                        <p>Os dados revelam que a interface dos aplicativos é robusta e funcional, com destaque para os aspectos visuais (65% avaliações positivas) e de usabilidade (75% positivas). Contudo, a interatividade apresenta apenas 60% de avaliações positivas, e o engajamento do usuário mostra o maior percentual de "Não aplica" (15%), indicando oportunidades claras de melhoria.</p>
+                        
+                        <div class="recommendations">
+                            <h5>Recomendações para Ação:</h5>
+                            <ul>
+                                <li>Implementar recursos mais dinâmicos como simulações interativas de algoritmos</li>
+                                <li>Adicionar elementos de gamificação para aumentar o engajamento</li>
+                                <li>Melhorar a personalização da experiência do usuário</li>
+                                <li>Desenvolver tutoriais interativos para onboarding de novos usuários</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-category">
+                        <h4>Qualidade Pedagógica</h4>
+                        <p>O conteúdo é avaliado como sólido e bem estruturado (70% positivas para Clareza das Instruções), demonstrando bom alinhamento com os objetivos educacionais. No entanto, a falta de feedback eficaz (apenas 60% positivas para Interatividade) e de reforço contínuo limita a eficácia pedagógica dos aplicativos, especialmente para iniciantes.</p>
+                        
+                        <div class="recommendations">
+                            <h5>Recomendações para Ação:</h5>
+                            <ul>
+                                <li>Implementar sistemas de feedback imediato e correção de exercícios</li>
+                                <li>Desenvolver trilhas de aprendizagem adaptativas</li>
+                                <li>Incluir exemplos práticos do mundo real</li>
+                                <li>Criar mecanismos de reforço espaçado para melhor retenção</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-category">
+                        <h4>Suporte e Efetividade</h4>
+                        <p>Os aplicativos demonstram estabilidade técnica (75% avaliações positivas para Usabilidade), mas aspectos como modelo de custo e privacidade foram mal avaliados (22% negativas). Isso pode comprometer a acessibilidade e a confiança dos usuários, especialmente em contextos educacionais formais.</p>
+                        
+                        <div class="recommendations">
+                            <h5>Recomendações para Ação:</h5>
+                            <ul>
+                                <li>Revisar modelos de monetização para garantir acessibilidade</li>
+                                <li>Fortalecer políticas de privacidade e transparência</li>
+                                <li>Implementar suporte técnico mais ágil e canais de ajuda</li>
+                                <li>Desenvolver versões institucionais para adoção em ambientes acadêmicos</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="insight-category">
+                        <h4>Considerações Finais e Visão Estratégica</h4>
+                        <p>Os dados indicam que os aplicativos de ensino de algoritmos são ferramentas valiosas, mas precisam evoluir em três dimensões críticas para alcançar seu pleno potencial:</p>
+                        <ol>
+                            <li><strong>Acessibilidade:</strong> Melhorar modelos de negócio e suporte para ampliar o acesso</li>
+                            <li><strong>Engajamento:</strong> Incorporar elementos interativos e de gamificação</li>
+                            <li><strong>Apoio Pedagógico:</strong> Fortalecer sistemas de feedback e acompanhamento</li>
+                        </ol>
+                        <p>A implementação dessas melhorias pode transformar esses aplicativos em ferramentas educacionais ainda mais eficazes, capazes de atender tanto ao aprendizado autônomo quanto à integração com currículos formais de programação.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <footer>
+            <p>Análise de Usabilidade | Aplicativos de Ensino de Algoritmos</p>
+    <p>Dados coletados em 2024 | Visualização interativa</p>
+    <p class="copyright">Desenvolvido por: Genilson Messias de Souza | Todos os direitos reservados &copy; 2024</p>
+        </footer>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Configuração comum para todos os gráficos
+            const commonChartConfig = {
+                type: 'bar',
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            mode: 'index',
+                            intersect: false,
+                            backgroundColor: 'rgba(30, 30, 40, 0.9)',
+                            titleColor: '#4fc3f7',
+                            bodyColor: '#ffffff',
+                            padding: 12,
+                            cornerRadius: 4,
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.dataset.label}: ${context.parsed.y}%`;
+                                }
+                            }
+                        },
+                        title: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        x: {
+                            stacked: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#e0f7fa',
+                                font: {
+                                    size: 12
+                                }
+                            }
+                        },
+                        y: {
+                            stacked: true,
+                            grid: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            },
+                            ticks: {
+                                color: '#e0f7fa',
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            },
+                            min: 0,
+                            max: 100
+                        }
+                    },
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            };
+            
+            // Dados comuns
+            const labels = [
+                'Clareza das Instruções',
+                'Interatividade',
+                'Usabilidade',
+                'Engajamento do Usuário',
+                'Qualidade Visual',
+                'Flexibilidade de Uso'
+            ];
+            
+            const datasets = [
+                {
+                    label: 'Excelente',
+                    data: [30, 25, 35, 22, 27, 30],
+                    backgroundColor: '#4fc3f7',
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Bom',
+                    data: [40, 35, 40, 33, 38, 28],
+                    backgroundColor: '#66bb6a',
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Regular',
+                    data: [20, 25, 15, 20, 20, 25],
+                    backgroundColor: '#ffee58',
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Ruim',
+                    data: [5, 10, 5, 10, 10, 12],
+                    backgroundColor: '#ef5350',
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                    borderWidth: 1
+                },
+                {
+                    label: 'Não aplica',
+                    data: [5, 5, 5, 15, 5, 5],
+                    backgroundColor: '#b0bec5',
+                    borderColor: 'rgba(255, 255, 255, 0.2)',
+                    borderWidth: 1
+                }
+            ];
+            
+            // Gráfico 1 - Usabilidade e Interatividade
+            const usabilityCtx = document.getElementById('usabilityChart').getContext('2d');
+            new Chart(usabilityCtx, {
+                ...commonChartConfig,
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                }
+            });
+            
+            // Gráfico 2 - Qualidade Pedagógica e do Conteúdo
+            const pedagogicalQualityCtx = document.getElementById('pedagogicalQualityChart').getContext('2d');
+            new Chart(pedagogicalQualityCtx, {
+                ...commonChartConfig,
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                }
+            });
+            
+            // Gráfico 3 - Suporte e Efetividade
+            const supportEffectivenessCtx = document.getElementById('supportEffectivenessChart').getContext('2d');
+            new Chart(supportEffectivenessCtx, {
+                ...commonChartConfig,
+                data: {
+                    labels: labels,
+                    datasets: datasets
+                }
+            });
+            
+            // Lógica do Modal de Insights
+            const modal = document.getElementById('insightsModal');
+            const btn = document.getElementById('insightsButton');
+            const span = document.getElementById('closeModal');
+            
+            btn.onclick = function() {
+                modal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Desabilita scroll
+            }
+            
+            span.onclick = function() {
+                modal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Habilita scroll
+            }
+            
+            window.onclick = function(event) {
+                if (event.target == modal) {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto'; // Habilita scroll
+                }
+            }
+        });
+    </script>
+</body>
+</html>
